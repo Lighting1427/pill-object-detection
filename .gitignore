@@ -1,0 +1,25 @@
+# Local Python environments
+.venv/
+.venv-web/
+
+# Dataset files (large/local-only)
+pill-dataset/
+
+# Training and runtime outputs
+runs/
+pill-web/backend/.config/
+pill-web/backend/.matplotlib/*
+!pill-web/backend/.matplotlib/.gitkeep
+__pycache__/
+*.py[cod]
+
+# Local environment configuration
+pill-web/backend/.env
+pill-web/frontend/.env
+pill-web/frontend/.env.*
+!pill-web/backend/.env.example
+!pill-web/frontend/.env.example
+
+# Frontend dependencies/build output
+pill-web/frontend/node_modules/
+pill-web/frontend/dist/
