@@ -1,0 +1,19 @@
+{
+  "settings_version": "0.0.8",
+  "datasets_dir": "D:\\project\\datasets",
+  "weights_dir": "D:\\project\\pill-object-detection\\weights",
+  "runs_dir": "D:\\project\\pill-object-detection\\runs",
+  "uuid": "c2af25db6a181fb3518064b27dd69c3f5e8414e36196dff2b123eaaba77ed00f",
+  "sync": true,
+  "api_key": "",
+  "openai_api_key": "",
+  "clearml": true,
+  "comet": true,
+  "dvc": true,
+  "mlflow": true,
+  "raytune": true,
+  "tensorboard": false,
+  "wandb": false,
+  "vscode_msg": true,
+  "openvino_msg": true
+}
