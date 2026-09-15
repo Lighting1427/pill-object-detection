@@ -4,6 +4,7 @@
 
 # Dataset files (large/local-only)
 pill-dataset/
+pill-dataset-clean
 
 # Training and runtime outputs
 runs/
