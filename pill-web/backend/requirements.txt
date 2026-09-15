@@ -1,7 +1,0 @@
-fastapi>=0.116
-uvicorn[standard]>=0.35
-python-multipart>=0.0.20
-python-dotenv>=1.0
-ultralytics>=8.4.121
-Pillow>=11.0
-numpy>=2.0

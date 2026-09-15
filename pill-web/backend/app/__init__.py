@@ -1,2 +1,0 @@
-"""PillVision backend package."""
-
