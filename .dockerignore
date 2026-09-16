@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+
+pill-dataset/
+pill-dataset-clean/
+
+runs/
+*.ipynb
+
+.git/
+.env
+.env.*
+!.env.example
+
+venv/
+.venv/
