@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบตรวจจับและนับเม็ดยา</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- Top Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <span class="brand-icon">💊</span>
+        <div class="brand-text">
+          <span class="brand-title">Pill Counter</span>
+          <span class="brand-sub">ระบบตรวจนับเม็ดยาจากภาพถ่าย</span>
+        </div>
+      </div>
+      <div class="nav-status">
+        <span class="status-indicator"></span>
+        <span>ระบบพร้อมทำงาน</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="page-container">
+    <div class="content-grid">
+      
+      <!-- Left Column: Upload & Actions -->
+      <section class="panel upload-panel">
+        <div class="panel-header">
+          <h2>1. เลือกรูปภาพ</h2>
+          <p class="panel-desc">อัปโหลดภาพเม็ดยาที่ต้องการให้นับจำนวน</p>
+        </div>
+
+        <div class="upload-zone" id="dropzone">
+          <input type="file" id="fileInput" accept="image/*" class="file-input">
+          <div class="upload-zone-body" id="dropzoneContent">
+            <div class="upload-icon">📁</div>
+            <p class="upload-main-text">คลิกเพื่อเลือกไฟล์ หรือ ลากรูปมาวางที่นี่</p>
+            <p class="upload-sub-text">รองรับไฟล์ JPG, PNG, WEBP</p>
+          </div>
+        </div>
+
+        <!-- Selected File Bar -->
+        <div class="file-card" id="fileInfoBar" style="display: none;">
+          <div class="file-card-info">
+            <span class="file-card-icon">🖼️</span>
+            <div>
+              <p class="file-card-name" id="fileNameText">ชื่อไฟล์</p>
+              <p class="file-card-size" id="fileSizeText">ขนาดไฟล์</p>
+            </div>
+          </div>
+          <button type="button" class="btn-remove" id="btnClearFile" title="ลบภาพนี้">เปลี่ยนภาพ</button>
+        </div>
+
+        <!-- Action Button -->
+        <button type="button" class="btn-primary" id="btnDetect" disabled>
+          <span class="btn-text">ตรวจนับเม็ดยา</span>
+          <span class="btn-spinner" id="btnSpinner" style="display: none;"></span>
+        </button>
+
+        <!-- Help Info Box -->
+        <div class="info-note">
+          <p class="info-title">💡 คำแนะนำเพื่อให้ผลลัพธ์แม่นยำ:</p>
+          <ul>
+            <li>วางเม็ดยาบนพื้นผิวที่สะอาด และมีสีตัดกับเม็ดยา</li>
+            <li>ถ่ายภาพจากมุมตรงในที่ที่มีแสงสว่างเพียงพอ</li>
+            <li>หลีกเลี่ยงเงาตกกระทบ หรือเม็ดยาที่วางซ้อนทับกันหนาแน่น</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Right Column: Results & Image View -->
+      <section class="panel result-panel">
+        <div class="panel-header">
+          <h2>2. ผลการตรวจนับ</h2>
+          <p class="panel-desc">สรุปจำนวนที่นับได้และตำแหน่งของเม็ดยา</p>
+        </div>
+
+        <!-- Metric Counter Strip -->
+        <div class="counter-strip">
+          <div class="counter-item primary-count">
+            <span class="counter-label">จำนวนเม็ดยาที่นับได้</span>
+            <div class="counter-number-group">
+              <span class="counter-number" id="pillCountValue">-</span>
+              <span class="counter-unit">เม็ด</span>
+            </div>
+          </div>
+          <div class="counter-item">
+            <span class="counter-label">สถานะ</span>
+            <span class="badge-status" id="statusBadge">รอภาพถ่าย</span>
+          </div>
+        </div>
+
+        <!-- Display Mode Options -->
+        <div class="view-bar" id="viewControls" style="display: none;">
+          <span class="view-bar-label">การแสดงผล:</span>
+          <div class="view-btn-group">
+            <button type="button" class="btn-opt active" data-mode="dot" id="btnModeDot">
+              ● จุดมาร์กเกอร์ (เห็นยาชัด)
+            </button>
+            <button type="button" class="btn-opt" data-mode="box-only" id="btnModeBoxOnly">
+              ▢ กรอบสี่เหลี่ยม
+            </button>
+            <button type="button" class="btn-opt" data-mode="full" id="btnModeFull">
+              🏷️ กรอบ + เปอร์เซ็นต์
+            </button>
+          </div>
+        </div>
+
+        <!-- Canvas / Preview Box -->
+        <div class="image-box" id="viewerContainer">
+          <div class="empty-state" id="viewerPlaceholder">
+            <span class="empty-icon">📷</span>
+            <p>ยังไม่มีภาพแสดงผล</p>
+            <span>เมื่อกดตรวจนับ ภาพพร้อมตำแหน่งเม็ดยาจะปรากฏที่นี่</span>
+          </div>
+          <div class="canvas-box" id="canvasWrapper" style="display: none;">
+            <canvas id="resultCanvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Details Table Section -->
+        <div class="details-box" id="detailsSection" style="display: none;">
+          <div class="details-title-bar">
+            <h3>รายละเอียดตำแหน่งแต่ละเม็ด</h3>
+            <span class="badge-count" id="detailsCount">0 รายการ</span>
+          </div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 70px;">ลำดับ</th>
+                  <th>พิกัดในภาพ (x1, y1) - (x2, y2)</th>
+                  <th style="width: 120px; text-align: right;">ความมั่นใจ</th>
+                </tr>
+              </thead>
+              <tbody id="detectionTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

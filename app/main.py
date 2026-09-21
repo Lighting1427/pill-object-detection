@@ -10,6 +10,9 @@ from fastapi import(
     HTTPException,
 )
 
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
 from ultralytics import YOLO 
 from dotenv import load_dotenv
 
@@ -33,6 +36,21 @@ app = FastAPI(
     title=("Pill Detection API"),
     version="1.0.0",
 )
+
+# Static files & UI template setup
+APP_DIR = Path(__file__).resolve().parent
+STATIC_DIR = APP_DIR / "static"
+TEMPLATES_DIR = APP_DIR / "templates"
+
+if STATIC_DIR.exists():
+    app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
+@app.get("/", response_class=HTMLResponse)
+def index():
+    html_file = TEMPLATES_DIR / "index.html"
+    if html_file.exists():
+        return HTMLResponse(content=html_file.read_text(encoding="utf-8"))
+    return HTMLResponse(content="<h1>Pill Detection API</h1><p>UI template not found.</p>")
 
 # Health endpoint
 @app.get("/health")
